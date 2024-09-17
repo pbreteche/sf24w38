@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ul>
+        {% for pizza in pizzas %}
+            <li>{{ pizza.name }}</li>
+        {% else %}
+            <li>Pas de pizza au menu ce soir.</li>
+        {% endfor %}
+    </ul>
+
+    {% if pizzas | length is divisible by(3) %}{% endif %}
+    {% if pizzas is not empty %}
+        <ul>
+            {% for pizza in pizzas %}
+                <li>{{ pizza.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Pas de pizza au menu ce soir.</p>
+    {% endif %}
+{% endblock %}
