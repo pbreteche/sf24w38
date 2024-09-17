@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\GrumpyPizza;
 use App\Repository\GrumpyPizzaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,15 @@ class GrumpyPizzaController extends AbstractController
 
         return $this->render('grumpy_pizza/index.html.twig', [
             'pizzas' => $pizzas,
+        ]);
+    }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], methods: 'GET')]
+    public function show(
+        GrumpyPizza $pizza,
+    ): Response {
+        return $this->render('grumpy_pizza/show.html.twig', [
+            'pizza' => $pizza,
         ]);
     }
 }
