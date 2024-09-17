@@ -6,6 +6,10 @@
     <dl>
         <dt>Taille</dt>
         <dd>{{ pizza.size }} cm</dd>
+        <dt>Ingredients</dt>
+        {% for ingredient in pizza.composedWith %}
+            <dd {% if loop.index is even %}class="even"{% endif %}>{{ ingredient.superName }}</dd>
+        {% endfor %}
     </dl>
 </article>
 {% endblock %}

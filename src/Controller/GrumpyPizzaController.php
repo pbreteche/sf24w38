@@ -3,14 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\GrumpyPizza;
+use App\Entity\Ingredient;
+use App\Form\GrumpyPizzaType;
 use App\Repository\GrumpyPizzaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/grumpy-pizza')]
@@ -57,15 +57,11 @@ class GrumpyPizzaController extends AbstractController
         Request $request,
         EntityManagerInterface $manager,
     ): Response {
-        $pizza = new GrumpyPizza();
-        $form = $this->createFormBuilder($pizza)
-            ->add('name', TextType::class, [
-                'required' => true,
-                'label' => 'Nom',
-            ])
-            ->add('size')
-            ->getForm()
-        ;
+        $pizza = (new GrumpyPizza())->setSize(32);
+        $form = $this->createForm(GrumpyPizzaType::class, $pizza, [
+            'without_size' => true,
+            'method' => 'GET',
+        ]);
 
         $form->handleRequest($request);
 
@@ -80,6 +76,27 @@ class GrumpyPizzaController extends AbstractController
         }
 
         return $this->render('grumpy_pizza/new.html.twig', [
+            'new_form' => $form->createView(),
+        ]);
+    }
+
+    #[Route(path: '/add-ingredient', methods: ['GET', 'POST'])]
+    public function addIngredient(
+        Request $request,
+        EntityManagerInterface $manager,
+    ): Response {
+        $ingredient = new Ingredient();
+        $form = $this->createFormBuilder($ingredient)->add('name')->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($ingredient);
+            $manager->flush();
+            $this->addFlash('success', 'L\'ingrédient a été ajouté.');
+
+            return $this->redirectToRoute('app_grumpypizza_addingredient');
+        }
+
+        return $this->render('grumpy_pizza/add_ingredient.html.twig', [
             'new_form' => $form->createView(),
         ]);
     }
