@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
+<article>
+    <h1>{{ pizza.name }}</h1>
+    <dl>
+        <dt>Taille</dt>
+        <dd>{{ pizza.size }} cm</dd>
+    </dl>
+</article>
 {% endblock %}
 

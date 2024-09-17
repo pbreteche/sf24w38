@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(new_form) }}
+    {{ form_errors(new_form) }}
+    {{ form_widget(new_form) }}
+    <button>Insérer</button>
+    {{ form_end(new_form) }}
+{% endblock %}
