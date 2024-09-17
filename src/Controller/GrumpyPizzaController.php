@@ -8,9 +8,11 @@ use App\Form\GrumpyPizzaType;
 use App\Repository\GrumpyPizzaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/grumpy-pizza')]
@@ -53,6 +55,7 @@ class GrumpyPizzaController extends AbstractController
     }
 
     #[Route('/new', methods: ['GET', 'POST'])]
+    #[IsGranted(new Expression('is_granted("ROLE_🍕") or is_granted("ROLE_🧀")'))]
     public function new(
         Request $request,
         EntityManagerInterface $manager,
