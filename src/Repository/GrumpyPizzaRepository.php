@@ -11,9 +11,33 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GrumpyPizzaRepository extends ServiceEntityRepository
 {
+    const MAX_RESULT_PER_PAGE = 10;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, GrumpyPizza::class);
+    }
+
+    public function findByNameStartingWith(
+        string $prefix = null,
+        int $offset = 0,
+        int $limit = self::MAX_RESULT_PER_PAGE,
+    ) {
+        $queryBuilder = $this->createQueryBuilder('grumpy_pizza')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+        ;
+
+        if ($prefix) {
+            $queryBuilder
+                ->andWhere('grumpy_pizza.name LIKE :pattern')
+                ->setParameter('pattern', $prefix.'%');
+        }
+
+        return $queryBuilder
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     //    /**

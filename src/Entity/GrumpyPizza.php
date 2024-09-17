@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\GrumpyPizzaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GrumpyPizzaRepository::class)]
 class GrumpyPizza
@@ -14,6 +15,7 @@ class GrumpyPizza
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 3, max: 255)]
     private ?string $name = null;
 
     #[ORM\Column]

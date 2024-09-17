@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <form>
+        <label for="pizza-filter-name">Nom</label>
+        <input type="search" name="name" id="pizza-filter-name">
+        <button>Filtrer</button>
+    </form>
+
     <ul>
         {% for pizza in pizzas %}
             <li>{{ pizza.name }}</li>

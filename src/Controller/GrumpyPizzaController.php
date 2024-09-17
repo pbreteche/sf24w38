@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/grumpy-pizza')]
 class GrumpyPizzaController extends AbstractController
@@ -18,15 +20,23 @@ class GrumpyPizzaController extends AbstractController
     public function index(
         Request $request,
         GrumpyPizzaRepository $repository,
+        ValidatorInterface $validator,
     ): Response {
         try {
             $page = $request->query->getInt('page', 1);
         } catch (\Throwable) {
             return $this->redirectToRoute($request->attributes->get('_route'));
         }
-        $limitPerPage = 10;
-        $offset = $limitPerPage * (max($page, 1) - 1);
-        $pizzas = $repository->findBy([], ['name' => 'ASC'], $limitPerPage, $offset);
+
+        /* Exemple utilisation du validator component
+        $violationList = $validator->validate(10000, new Choice(choices: [5, 10, 20]));
+        if (0 < $violationList->count()) {
+        }
+        */
+
+        $nameFilter = $request->query->get('name');
+        $offset = GrumpyPizzaRepository::MAX_RESULT_PER_PAGE * (max($page, 1) - 1);
+        $pizzas = $repository->findByNameStartingWith($nameFilter, $offset);
 
         return $this->render('grumpy_pizza/index.html.twig', [
             'pizzas' => $pizzas,
