@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\IngredientRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute as Serializer;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
 class Ingredient
@@ -33,6 +34,7 @@ class Ingredient
         return $this;
     }
 
+    #[Serializer\SerializedName('name')]
     public function getSuperName(): string
     {
         return mb_ucfirst($this->name);

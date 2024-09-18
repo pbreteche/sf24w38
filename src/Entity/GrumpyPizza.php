@@ -6,6 +6,7 @@ use App\Repository\GrumpyPizzaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute as Serialization;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GrumpyPizzaRepository::class)]
@@ -89,6 +90,7 @@ class GrumpyPizza
     }
 
     #[Assert\Length(max: 128)]
+    #[Serialization\Ignore]
     public function getConcatString(): string
     {
         return $this->name;
