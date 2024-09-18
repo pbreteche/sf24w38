@@ -18,4 +18,15 @@ class PizzaController extends AbstractController
 
         return $this->json($pizzas);
     }
+
+    #[Route('/short', methods: 'GET')]
+    public function indexShort(
+        GrumpyPizzaRepository $repository,
+    ): JsonResponse {
+        $pizzas = $repository->findByNameStartingWith();
+
+        return $this->json($pizzas, context: [
+            'groups' => 'short',
+        ]);
+    }
 }

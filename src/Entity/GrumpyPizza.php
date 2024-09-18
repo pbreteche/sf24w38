@@ -15,10 +15,12 @@ class GrumpyPizza
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Serialization\Groups('short')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 3, max: 255)]
+    #[Serialization\Groups('short')]
     private ?string $name = null;
 
     #[ORM\Column]
