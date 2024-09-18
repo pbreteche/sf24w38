@@ -6,6 +6,7 @@ use App\Entity\GrumpyPizza;
 use App\Entity\Ingredient;
 use App\Form\GrumpyPizzaType;
 use App\Repository\GrumpyPizzaRepository;
+use App\Services\ServiceDemo;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -107,6 +108,35 @@ class GrumpyPizzaController extends AbstractController
 
         return $this->render('grumpy_pizza/add_ingredient.html.twig', [
             'new_form' => $form->createView(),
+        ]);
+    }
+
+
+    #[Route('/{id}/edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request,
+        GrumpyPizza $pizza,
+        EntityManagerInterface $manager,
+        ServiceDemo $demo,
+    ): Response {
+        $form = $this->createForm(GrumpyPizzaType::class, $pizza, [
+            'without_size' => true,
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $demo->example();
+            $manager->flush();
+            $this->addFlash('success', 'La pizza a été modifiée.');
+
+            return $this->redirectToRoute('app_grumpypizza_show', [
+                'id' => $pizza->getId(),
+            ]);
+        }
+
+        return $this->render('grumpy_pizza/edit.html.twig', [
+            'edit_form' => $form->createView(),
         ]);
     }
 }

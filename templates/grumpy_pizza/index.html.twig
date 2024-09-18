@@ -19,7 +19,7 @@
     {% if pizzas is not empty %}
         <ul>
             {% for pizza in pizzas %}
-                <li>{{ pizza.name }}</li>
+                <li><a href="{{ path('app_grumpypizza_show', {id: pizza.id}) }}">{{ pizza.name }}</a></li>
             {% endfor %}
         </ul>
     {% else %}
