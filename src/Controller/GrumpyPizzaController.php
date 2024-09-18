@@ -45,6 +45,7 @@ class GrumpyPizzaController extends AbstractController
         ]);
     }
 
+    #[IsGranted('PIZZA_SHOW', 'pizza', statusCode: 404)]
     #[Route('/{id}', requirements: ['id' => '\d+'], methods: 'GET')]
     public function show(
         GrumpyPizza $pizza,
@@ -56,6 +57,7 @@ class GrumpyPizzaController extends AbstractController
 
     #[Route('/new', methods: ['GET', 'POST'])]
     #[IsGranted(new Expression('is_granted("ROLE_🍕") or is_granted("ROLE_🧀")'))]
+    #[IsGranted('IS_WORKED')]
     public function new(
         Request $request,
         EntityManagerInterface $manager,
@@ -67,6 +69,10 @@ class GrumpyPizzaController extends AbstractController
         ]);
 
         $form->handleRequest($request);
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('info', 'your IP is ...');
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->persist($pizza);
