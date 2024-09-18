@@ -27,6 +27,9 @@ class ApiUser implements UserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $label = null;
 
+    #[ORM\ManyToOne(inversedBy: 'owner')]
+    private ?PizzaExportConfig $pizzaExportConfig = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,6 +98,18 @@ class ApiUser implements UserInterface
     public function setLabel(?string $label): static
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function getPizzaExportConfig(): ?PizzaExportConfig
+    {
+        return $this->pizzaExportConfig;
+    }
+
+    public function setPizzaExportConfig(?PizzaExportConfig $pizzaExportConfig): static
+    {
+        $this->pizzaExportConfig = $pizzaExportConfig;
 
         return $this;
     }

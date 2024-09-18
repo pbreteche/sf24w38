@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit PizzaExportConfig{% endblock %}
+
+{% block body %}
+    <h1>Edit PizzaExportConfig</h1>
+
+    {{ include('pizza_export_config/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_pizza_export_config_index') }}">back to list</a>
+
+    {{ include('pizza_export_config/_delete_form.html.twig') }}
+{% endblock %}

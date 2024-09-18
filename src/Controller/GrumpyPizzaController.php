@@ -8,6 +8,7 @@ use App\Form\GrumpyPizzaType;
 use App\Repository\GrumpyPizzaRepository;
 use App\Services\ServiceDemo;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\CacheItemInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 #[Route('/grumpy-pizza')]
 class GrumpyPizzaController extends AbstractController
@@ -50,7 +52,14 @@ class GrumpyPizzaController extends AbstractController
     #[Route('/{id}', requirements: ['id' => '\d+'], methods: 'GET')]
     public function show(
         GrumpyPizza $pizza,
+        CacheInterface $cache,
     ): Response {
+        $ingredientsCount = $cache->get('pizza.ingredients_count', function (CacheItemInterface $item) use ($pizza) {
+            $item->expiresAfter(24*60*60);
+
+            return $pizza->getComposedWith()->count();
+        });
+
         return $this->render('grumpy_pizza/show.html.twig', [
             'pizza' => $pizza,
         ]);

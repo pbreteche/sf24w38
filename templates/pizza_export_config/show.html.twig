@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PizzaExportConfig{% endblock %}
+
+{% block body %}
+    <h1>PizzaExportConfig</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pizza_export_config.id }}</td>
+            </tr>
+            <tr>
+                <th>Fields</th>
+                <td>{{ pizza_export_config.fields }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pizza_export_config_index') }}">back to list</a>
+
+    <a href="{{ path('app_pizza_export_config_edit', {'id': pizza_export_config.id}) }}">edit</a>
+
+    {{ include('pizza_export_config/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PizzaExportConfig index{% endblock %}
+
+{% block body %}
+    <h1>PizzaExportConfig index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fields</th>
+                <th>Owner</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pizza_export_config in pizza_export_configs %}
+            <tr>
+                <td>{{ pizza_export_config.id }}</td>
+                <td>{{ pizza_export_config.fields | join }}</td>
+                <td>
+                    {% for owner in pizza_export_config.owners %}
+                    {{ owner.label }} ({{ owner.token | u.truncate(7) }}) {% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{{ path('app_pizza_export_config_show', {'id': pizza_export_config.id}) }}">show</a>
+                    <a href="{{ path('app_pizza_export_config_edit', {'id': pizza_export_config.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pizza_export_config_new') }}">Create new</a>
+{% endblock %}
